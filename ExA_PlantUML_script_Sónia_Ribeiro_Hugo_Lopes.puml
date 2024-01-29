@@ -1,0 +1,92 @@
+@startuml
+
+'left to right direction
+top to bottom direction
+
+title Modelo Lógico
+
+class Seccao {
+codigoSeccao [pk]
+nomeSeccao
+funcionarioID [fk]
+manutencaoID [fk]
+}
+
+class Manutencao {
+manutencaoID [pk]
+}
+
+class Funcionario {
+funcionarioID [pk]
+biFuncionario
+nomeFuncionario
+funcionarioManutencaoID [fk]
+}
+
+class FuncionarioManutencao {
+funcionarioManutencaoID [pk]
+manutencaoID [fk]
+}
+
+class Fornecedor {
+fornecedorID [pk]
+numeroContribuinte
+nomeEmpresa
+moradaEmpresa
+listaTelefones
+compraID [fk]
+codigoMaterial [fk]
+}
+class Compra {
+compraID [pk]
+quantidadeAdquirida
+dataAquisicao
+precoCompra
+}
+class Material {
+codigoMaterial [pk]
+designacaoMaterial
+unidadeMedida
+categoriaMaterial
+}
+class Atividade {
+atividadeID [pk]
+dataInicioPrevista
+dataFimPrevista
+dataInicioEfetiva
+dataFimEfetiva
+quantidadeGasta
+codigoMaterial [fk]
+manutencaoID [fk]
+}
+
+class PedidoManutencao {
+numeroSequencial [pk]
+dataEnvio
+horaEnvio
+funcionarioID [fk]
+atividadeID [fk]
+manutencaoID [fk]
+}
+class Especialidade {
+especialidadeID [pk]
+manutencaoID [fk]
+funcionarioManutencaoID [fk]
+}
+
+FuncionarioManutencao "1    " --down|> "1    " Funcionario : is a >
+Manutencao "1    " --down "1" FuncionarioManutencao : has <
+Funcionario "1   " --down "*" Seccao : works in >
+Manutencao "1" --down|> "1    " Seccao : is a >
+Manutencao "1 " --down "       *" Especialidade : has >
+FuncionarioManutencao "1" --down "1   " Especialidade : has >
+Funcionario "1" --down "*" PedidoManutencao : requests >
+Manutencao "1" --down "*" PedidoManutencao : has >
+Manutencao "1" --down "*" Atividade : has >
+Atividade "1  " --down "*" PedidoManutencao : has >
+Atividade "*" --down "1   " Material : part of <
+Fornecedor "* " --down "1 " Material : supplies >
+Compra "1 " --down "* " Fornecedor : purchased from >
+
+
+@enduml
